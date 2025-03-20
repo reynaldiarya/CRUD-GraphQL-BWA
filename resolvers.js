@@ -1,9 +1,9 @@
-const BookModel = require('./models/Book');
+import BookModel from "./models/Book.js";
 
-module.exports = {
+const resolvers = {
   Query: {
-      getAllBooks: async (_, args) => await BookModel.find({}),
-      getBook: async (_, args) => await BookModel.findById(args._id)
+    getAllBooks: async (_, args) => await BookModel.find({}),
+    getBook: async (_, args) => await BookModel.findById(args._id),
   },
 
   Mutation: {
@@ -14,14 +14,18 @@ module.exports = {
     },
 
     updateBook: async (_, args) => {
-      const book = await BookModel.findByIdAndUpdate(args._id, args, { new: true });
+      const book = await BookModel.findByIdAndUpdate(args._id, args, {
+        new: true,
+      });
       return book;
     },
 
     deleteBook: async (_, args) => {
-      const book = await BookModel.findByIdAndRemove(args._id);
+      const book = await BookModel.findByIdAndDelete(args._id);
       if (book) return true;
       return false;
-    }
-  }
-}
+    },
+  },
+};
+
+export default resolvers;

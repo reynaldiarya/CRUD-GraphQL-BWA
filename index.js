@@ -1,19 +1,25 @@
-const { ApolloServer } = require('apollo-server');
-const mongoose = require('mongoose');
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+import mongoose from "mongoose";
 
-const typeDefs = require('./schema');
-const resolvers = require('./resolvers');
+import typeDefs from "./schema.js";
+import resolvers from "./resolvers.js";
 
 // mongoose connection
-mongoose.connect('mongodb://localhost:27017/bwa-graphql', { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true,
-  useFindAndModify: true
+mongoose.connect(
+  "Your MongoDB connection string",
+);
+
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
 });
 
-const server = new ApolloServer({ typeDefs, resolvers });
-
-server.listen()
-  .then(({ url }) => {
-    console.log(`Server ready at ${url}`);
+const startServer = async () => {
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: 4000 },
   });
+  console.log(`Server ready at ${url}`);
+};
+
+startServer();
